@@ -1,45 +1,13 @@
 const gamesRouter = require("express").Router();
-const { readData, writeData } = require("../utils/data");
+const {
+    sendAllGames,
+    deleteGame,
+    addGameController
+} = require("../controllers/games");
+const { getAllGames } = require("../middlewares/games");
 
-const getAllGames = async (req, res) => {
-    const games = await readData("./data/games.json");
-    if (!games) {
-        res.status(400);
-        res.send({
-            status: "error",
-            message: "Нет игр в базе данных. Добавьте игру"
-        });
-        return;
-    }
-    req.games = games;
-    res.send(req.games);
-};
-
-const deleteGame = async (req, res) => {
-    const games = await readData("./data/games.json");
-    if (!games) {
-        res.status(400);
-        res.send({
-            status: "error",
-            message: "Нет игр в базе данных. Добавьте игру"
-        });
-        return;
-    }
-
-    req.games = games;
-    const id = Number(req.params.id);
-    req.game = req.games.find((item) => item.id === id);
-    const index = req.games.findIndex((game) => game.id === req.game.id);
-    req.games.splice(index, 1);
-
-    await writeData("./data/games.json", req.games);
-    res.send({
-        games: req.games,
-        updated: req.game
-    });
-};
-
-gamesRouter.get("/games", getAllGames);
-gamesRouter.delete("/games/:id", deleteGame);
+gamesRouter.get("/games", getAllGames, sendAllGames);
+gamesRouter.delete("/games/:id", getAllGames, deleteGame);
+gamesRouter.post("/games", getAllGames, addGameController);
 
 module.exports = gamesRouter;

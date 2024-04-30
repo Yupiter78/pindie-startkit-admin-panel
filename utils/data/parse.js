@@ -9,7 +9,7 @@ const readData = async (path) => {
     }
 };
 
-const writeData = async (data, path) => {
+const writeData = async (path, data) => {
     const json = JSON.stringify(data);
     await fs.writeFile(path, json);
 };
