@@ -1,2 +1,2 @@
-const { readFile, writeFile } = require("./parse");
-module.exports = { readFile, writeFile };
+const { readData, writeData } = require("./parse");
+module.exports = { readData, writeData };
